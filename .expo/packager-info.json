@@ -1,10 +1,10 @@
 {
-  "expoServerPort": 19000,
-  "packagerPort": 19001,
-  "packagerPid": 14928,
-  "expoServerNgrokUrl": "https://2f-tht.anonymous.newsapp-react-native.exp.direct",
-  "packagerNgrokUrl": "https://packager.2f-tht.anonymous.newsapp-react-native.exp.direct",
-  "ngrokPid": 1680,
+  "expoServerPort": null,
+  "packagerPort": null,
+  "packagerPid": null,
+  "expoServerNgrokUrl": null,
+  "packagerNgrokUrl": null,
+  "ngrokPid": null,
   "webpackServerPort": null,
   "devToolsPort": 19002
 }
