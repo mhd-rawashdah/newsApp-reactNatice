@@ -1,8 +1,10 @@
 import React from 'react';
 import { View, StyleSheet, FlatList, Text } from 'react-native';
 import NewsListItem from './NewsListItem';
+import ProgressBar from './ProgressBar';
 
 export default class HomeScreen extends React.Component {
+  // add navication Option
   static navigationOptions = {
     title: 'Home',
     headerStyle: {
@@ -14,29 +16,59 @@ export default class HomeScreen extends React.Component {
     },
   };
 
-  _onItemPress(item) {
-    this.props.navigation.navigate('NewsDetails', {'item': item});
+  constructor(props) {
+    super(props);
+    this.state = {
+      newsData: [],
+      isLoaded: true
+    }
   }
-  render() {
-    const data = [
-      { id: 1, title: 'HEllodsdsdasbdasddsd', img: 'https://facebook.github.io/react-native/docs/assets/favicon.png', date: '5 day ago' },
-      { id: 2, title: 'HEllodsdsdasbdasddsd', img: 'https://facebook.github.io/react-native/docs/assets/favicon.png', date: '5 day ago' },
-      { id: 3, title: 'HEllodsdsdasbdasddsd', img: 'https://facebook.github.io/react-native/docs/assets/favicon.png', date: '5 day ago' },
-      { id: 4, title: 'HEllodsdsdasbdasddsd', img: 'https://facebook.github.io/react-native/docs/assets/favicon.png', date: '5 day ago' },
-      { id: 5, title: 'HEllodsdsdasbdasddsd', img: 'https://facebook.github.io/react-native/docs/assets/favicon.png', date: '5 day ago' }
 
-    ]
+  componentDidMount () {
+    // call getNewsData() to fetch the data from API
+     this.getNewsData();
+  }
+
+  // function to get data from API
+  getNewsData() {
+    const url ='https://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=1355006627464de1bea55e1cd7420d1c';
+    
+    return fetch(url)
+      .then((response) => {
+        return response.json();
+      }).then((res) => {
+        let articles = res.articles;
+        this.setState({
+          newsData: articles,
+          isLoaded: false,
+        })
+      });
+  }
+
+  // function to onPress on ListItem that pass as props to newsListItem
+  _onItemPress(item) {
+    this.props.navigation.navigate('NewsDetails', { 'item': item });
+  }
+
+  render() {
     return (
+      !this.state.isLoaded ? (
       <View style={styles.container}>
         <FlatList
-          data={data}
-          renderItem={({ item }) => <NewsListItem key={item} onItemPress= {this._onItemPress.bind(this)} item={item} />}
+          refreshing= {this.state.isLoaded}
+          onRefresh = {this.getNewsData.bind(this)}
+          keyExtractor ={(item, index) => index+''}
+          data={this.state.newsData}
+          renderItem={({ item }) => <NewsListItem onItemPress={this._onItemPress.bind(this)} item={item} />}
         />
       </View>
+      ) : 
+      (
+        <ProgressBar />
+      )
     )
   }
 }
-
 const styles = StyleSheet.create({
   container: {
     padding: 10,

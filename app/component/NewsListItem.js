@@ -1,7 +1,12 @@
 import React from 'react';
 import { View, StyleSheet, Image, Text, TouchableOpacity } from 'react-native';
+import moment from 'moment';
+
 
 export default class NewsListItem extends React.Component {
+
+  // function to excute the recive function onPressItem 
+  //from HomeScreen and pass the target item to active onPress on ListItem
   _onItemPress() {
     this.props.onItemPress(this.props.item)
   }
@@ -14,13 +19,13 @@ export default class NewsListItem extends React.Component {
               <Text style={styles.titleTxt}>{this.props.item.title}</Text>
             </View>
             <View style={styles.date}>
-              <Text style={styles.dateTxt}>{this.props.item.date} </Text>
+              <Text style={styles.dateTxt}>{moment(this.props.item.publishedAtmoment).fromNow()} </Text>
             </View>
           </View>
           <View style={styles.imgContainer}>
             <Image
               style={styles.image}
-              source={{ uri: this.props.item.img }}
+              source={{ uri: this.props.item.urlToImage }}
             />
           </View>
         </View>
@@ -63,10 +68,12 @@ const styles = StyleSheet.create({
     fontWeight: 'bold'
   },
   date: {
+    marginTop: 10,
     flex: 1,
   },
   dateTxt: {
     color: '#666',
   }
-
 })
+
+
